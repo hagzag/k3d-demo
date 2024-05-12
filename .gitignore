@@ -1,0 +1,8 @@
+.env
+.task
+*.pem
+.config/tls/base/tls-secret.yaml
+.config/.dockerconfig.json
+.config/docker-config/.dockerconfig.json
+*.tgz
+storage/

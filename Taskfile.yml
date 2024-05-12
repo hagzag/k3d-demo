@@ -1,0 +1,50 @@
+version: '3'
+
+dotenv:
+  - .env
+
+includes:
+  k3d: https://raw.githubusercontent.com/hagzag/code-samples/main/posts/k3d-intro/k3d-intro.yaml
+  ingress-nginx: https://raw.githubusercontent.com/hagzag/code-samples/main/posts/ingress-nginx/tasks.yaml
+  config: https://raw.githubusercontent.com/hagzag/code-samples/main/posts/config/tasks.yaml
+
+tasks:
+
+  all:
+    desc: Run all tasks
+    interactive: true
+    cmds:
+    - task: create-cluster
+    - task: install-config-apps
+    - task: install-ingress-nginx
+    - task: install-whoami
+    - curl https://whoami.k8s.localhost 
+
+  create-cluster:
+    desc: Start the k3d cluster
+    cmds:
+    - task: k3d:cluster-template
+    - task: k3d:cluster-create
+    - task: k3d:dns
+    - task: k3d:certs
+
+  install-config-apps:
+    desc: Install reloader + scheduler resources manually on the local cluster
+    cmds:
+    - task: config:reloader-local-apply
+    - task: config:reflector-local-apply
+
+  install-ingress-nginx:
+    desc: Deploy nginx project
+    cmds:
+    - task: ingress-nginx:local-apply
+
+  install-whoami:
+    desc: Deploy nginx project
+    cmds:
+    - task: config:whoami-local-apply
+
+  destroy-env:
+    desc: Destroy the k3d cluster
+    cmds:
+    - k3d cluster delete $CLUSTER_NAME

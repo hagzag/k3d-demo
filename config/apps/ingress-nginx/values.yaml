@@ -1,0 +1,6 @@
+ingress-nginx:
+  extraArgs:
+    default-ssl-certificate: "kube-system/tls-secret"
+  controller:
+    autoscaling:
+      enabled: false
